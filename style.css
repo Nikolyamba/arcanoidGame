@@ -5,3 +5,26 @@ body {
 canvas {
     background-color: black;
 }
+
+h1 {
+    font-family: 'Press Start 2P', cursive; 
+    color: white;
+    font-size: 32px;
+    letter-spacing: 2px;
+    padding: 10px 20px;
+    width: 350px;
+}
+
+#startBtn {
+    background: linear-gradient(45deg, #ff4a00, #ffcc00); /* яркий градиент */
+    color: #fff; /* яркий цвет текста */
+    font-family: 'Press Start 2P', cursive; /* шрифты в стиле аркадных игр */
+    font-size: 24px;
+    padding: 15px 30px;
+    border: 3px solid #fff; /* контур */
+    border-radius: 10px; /* закругленные углы */
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* эффект тени */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* тень текста */
+    transition: all 0.2s ease;
+}

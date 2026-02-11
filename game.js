@@ -1,4 +1,14 @@
-import levelsGeneration from "./features/level_generate";
+function levelsGeneration(rows=3, cols=8) {
+    var level = []
+        for (let row = 0; row < rows; row++) {
+            let colArr = []
+            for (let col = 0; col < cols; col++) {
+                colArr.push(Math.floor(Math.random() * 4))
+            }
+            level.push(colArr)
+        }
+    return level
+    }
 
 class arcanoidGame {
     constructor() {
@@ -8,12 +18,18 @@ class arcanoidGame {
         this.ball = new Ball()
         this.platform = new Platform(this.canvas)
 
+        this.level = levelsGeneration()
+        this.bricks = []
+
+        const brickWidth = this.canvas.width / this.level[0].length
+        const brickHeight = 30
+
         for (let row = 0; row < this.level.length; row++) {
             for (let col = 0; col < this.level[row].length; col++) {
 
                 const health = this.level[row][col]
 
-                if (health < 1) continue  // если кирпича нет — пропускаем
+                if (health < 1) continue
 
                 const x = col * brickWidth
                 const y = row * brickHeight + 50
@@ -33,6 +49,8 @@ class arcanoidGame {
              this.canvas.height)
         this.ball.draw(this.context)
         this.platform.draw(this.context)
+
+        this.bricks.forEach((brick) => brick.draw(this.context))
     }
 
     update() {
@@ -56,5 +74,3 @@ class arcanoidGame {
         requestAnimationFrame(() => this.loop())
     }
 }
-
-const startGame = new arcanoidGame();

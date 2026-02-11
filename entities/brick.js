@@ -16,6 +16,7 @@ class Brick {
         context.fillStyle = this.health == 3 ? 'green':
         this.health == 2 ? 'blue' :
         this.health == 1 ? 'red' : 'transparent'
+        context.strokeStyle = "#000000";
         context.fill()
         context.closePath();
     }
