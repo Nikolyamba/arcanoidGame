@@ -1,30 +1,51 @@
 body {
     background-color: #111;
+    margin: 0;
+    padding: 0;
+    height: 100vh; /* занимаем всю высоту экрана */
+    display: flex;
+    justify-content: center; /* по горизонтали */
+    align-items: center; /* по вертикали */
+    font-family: 'Press Start 2P', cursive;
+}
+
+#menu {
+    text-align: center; /* заголовок и кнопка по центру */
+    color: white;
 }
 
 canvas {
     background-color: black;
+    display: block;
+    margin: 0 auto;
 }
 
 h1 {
-    font-family: 'Press Start 2P', cursive; 
-    color: white;
     font-size: 32px;
     letter-spacing: 2px;
-    padding: 10px 20px;
-    width: 350px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 24px;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
 }
 
 #startBtn {
-    background: linear-gradient(45deg, #ff4a00, #ffcc00); /* яркий градиент */
-    color: #fff; /* яркий цвет текста */
-    font-family: 'Press Start 2P', cursive; /* шрифты в стиле аркадных игр */
+    background: linear-gradient(45deg, #ff4a00, #ffcc00);
+    color: #fff;
     font-size: 24px;
     padding: 15px 30px;
-    border: 3px solid #fff; /* контур */
-    border-radius: 10px; /* закругленные углы */
+    border: 3px solid #fff;
+    border-radius: 10px;
     cursor: pointer;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.5); /* эффект тени */
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.6); /* тень текста */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
     transition: all 0.2s ease;
+}
+
+#startBtn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.6);
 }

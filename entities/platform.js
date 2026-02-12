@@ -12,11 +12,11 @@ class Platform {
     }
 
     draw(context) {
-        context.beginPath();
-        context.rect(this.x, this.y, this.width, this.height);
-        context.fillStyle = 'red'
-        context.fill()
-        context.closePath();
+    context.fillStyle = '#FF5555';
+    context.strokeStyle = '#880000';
+    context.lineWidth = 3;
+    context.fillRect(this.x, this.y, this.width, this.height);
+    context.strokeRect(this.x, this.y, this.width, this.height);
     }
 
     bindControls() {

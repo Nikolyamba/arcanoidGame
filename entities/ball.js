@@ -1,10 +1,15 @@
 class Ball {
-    constructor() {
-        this.x = 400,
-        this.y = 300,
-        this.radius = 10,
-        this.vx = 3,
-        this.vy = -3
+    constructor(platform) {
+        this.radius = 10;
+        this.x = platform.x + (platform.width / 2);
+        this.y = platform.y - this.radius;
+        this.vx = 3;
+        this.vy = -3;
+        this.active = false;
+    }
+
+    launch() {
+        this.active = true
     }
 
     draw(context) {
@@ -16,7 +21,13 @@ class Ball {
         context.closePath();
         }
 
-    update(canvas) {
+    update(canvas, platform) {
+        if (!this.active) {
+            this.x = platform.x + (platform.width / 2)
+            this.y = platform.y - this.radius
+            return ;
+        }
+
         this.x += this.vx
         this.y += this.vy
 
@@ -26,6 +37,10 @@ class Ball {
             }
         if (this.y - this.radius < 0) {
             this.vy *= -1
+        }
+        
+        if (this.y - this.radius > canvas.height){
+            return "gameover"
         }
     }
 }
