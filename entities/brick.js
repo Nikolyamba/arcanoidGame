@@ -25,8 +25,8 @@ class Brick {
         if (!this.destroyed) {
             this.health -= 1
         }
-        if (this.health < 0) {
-            this.destroyed = true
-        }
+            if (this.health < 0) {
+                this.destroyed = true
+            }
     }
 }

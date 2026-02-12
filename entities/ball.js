@@ -3,8 +3,8 @@ class Ball {
         this.x = 400,
         this.y = 300,
         this.radius = 10,
-        this.vx = 5,
-        this.vy = -5
+        this.vx = 3,
+        this.vy = -3
     }
 
     draw(context) {

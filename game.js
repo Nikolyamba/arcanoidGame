@@ -64,6 +64,30 @@ class arcanoidGame {
             this.ball.vy *= -1
         }
 
+        this.bricks.forEach((brick) => {
+            if (brick.destroyed) return 
+            
+            const ballLeft = this.ball.x - this.ball.radius;
+            const ballRight = this.ball.x + this.ball.radius;
+            const ballTop = this.ball.y - this.ball.radius;
+            const ballBottom = this.ball.y + this.ball.radius;
+
+            const brickLeft = brick.x;
+            const brickRight = brick.x + brick.width;
+            const brickTop = brick.y;
+            const brickBottom = brick.y + brick.height;
+
+            const colission = ballLeft < brickRight &&
+            ballRight > brickLeft &&
+            ballBottom > brickTop &&
+            ballTop < brickBottom
+
+            if (colission) {
+                brick.hit()
+                this.ball.vy *= -1
+            }
+        }
+    )
     }
 
     loop(){
@@ -74,3 +98,4 @@ class arcanoidGame {
         requestAnimationFrame(() => this.loop())
     }
 }
+
