@@ -1,4 +1,4 @@
-function levelsGeneration(rows=3, cols=8) {
+function levelsGeneration(rows=1, cols=4) {
     var level = []
         for (let row = 0; row < rows; row++) {
             let colArr = []
@@ -6,6 +6,7 @@ function levelsGeneration(rows=3, cols=8) {
                 colArr.push(Math.floor(Math.random() * 4))
             }
             level.push(colArr)
+            level.push([])
         }
     return level
     }
@@ -19,6 +20,8 @@ class arcanoidGame {
         this.ball = new Ball(this.platform)
 
         this.score = 0
+        this.speedMultiplier = 1
+        this.levelNum = 0
 
         this.nextLevel()
         this.bindControls()
@@ -28,17 +31,20 @@ class arcanoidGame {
     bindControls() {
     document.addEventListener('keydown', (event) => {
         if (event.code === 'Space' && !this.ball.active) {
-            this.ball.launch();
+            this.ball.launch(this.speedMultiplier);
         }
     });
     }
 
     nextLevel() {
+        this.levelNum ++
         this.level = levelsGeneration();
         this.bricks = [];
 
         const brickWidth = this.canvas.width / this.level[0].length;
         const brickHeight = 30;
+
+        this.speedMultiplier += 0.2;
 
         for (let row = 0; row < this.level.length; row++) {
             for (let col = 0; col < this.level[row].length; col++) {
@@ -57,24 +63,32 @@ class arcanoidGame {
 
         this.ball.vx *= 1.1;
         this.ball.vy *= 1.1;
+
+        this.platform.x = (this.canvas.width - this.platform.width) / 2;
+
+        this.ball.reset(this.platform);
     }
 
     gameOver() {
-        alert(`Игра окончена! Ваш счёт: ${this.score}`);
-
         const bestScore = localStorage.getItem("bestScore") || 0;
 
         if (this.score > bestScore) {
             localStorage.setItem("bestScore", this.score);
+        alert(`Игра окончена! Ваш счёт: ${this.score}`);
         }
-
-        location.reload();
     }
 
     draw() {
-
         this.context.clearRect(0, 0, this.canvas.width, 
-             this.canvas.height)
+        this.canvas.height)
+
+        this.context.fillStyle = 'white'
+        this.context.font = "14px 'Press Start 2P'";
+        this.textScore = "Счёт: " + this.score;
+        this.textLevel = "Уровень: " + this.levelNum;
+        this.context.fillText(this.textScore, 20, 570);
+        this.context.fillText(this.textLevel, 635, 570)
+
         this.ball.draw(this.context)
         this.platform.draw(this.context)
 
@@ -86,6 +100,7 @@ class arcanoidGame {
 
         if (result === "gameover") {
             this.gameOver();
+            location.reload();
         }
 
         this.platform.update(this.canvas)
@@ -122,11 +137,12 @@ class arcanoidGame {
 
             if (colission) {
                 brick.hit()
-                this.score += 50
-                this.ball.vy *= -1
-                
                 if (brick.destroyed) {
                     this.score += 100
+                }
+                else {
+                    this.score += 50
+                    this.ball.vy *= -1
                 }
             }   
         }
@@ -134,6 +150,7 @@ class arcanoidGame {
         const remainingBricks = this.bricks.filter(b => !b.destroyed);
 
         if (remainingBricks.length === 0) {
+            setTimeout(() => {}, 1500); 
             alert('Вы прошли уровень!')
             alert(`Ваше суммарное количество очков: ${this.score}`)
             this.nextLevel();

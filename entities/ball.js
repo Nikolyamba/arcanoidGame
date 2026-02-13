@@ -8,8 +8,20 @@ class Ball {
         this.active = false;
     }
 
-    launch() {
-        this.active = true
+    reset(platform) {
+        this.x = platform.x + platform.width / 2;
+        this.y = platform.y - this.radius;
+
+        this.vx = 3;
+        this.vy = -3;
+
+        this.active = false;
+    }
+
+    launch(speedMultiplier = 1) {
+        this.active = true;
+        this.vx = 3 * speedMultiplier;
+        this.vy = -3 * speedMultiplier;
     }
 
     draw(context) {
