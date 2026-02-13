@@ -9,8 +9,7 @@ const bestScore = localStorage.getItem('bestScore') || 0;
 score.textContent = `Ваш предыдущий рекорд: ${bestScore}`;
 
 startBtn.addEventListener('click', () => {
-    menu.style.display = "none";
-    canvas.style.display = "block";
-
-    new arcanoidGame();
+    menu.style.display = 'none';
+    canvas.style.display = 'block';
+    new ArcanoidGame();
 });

@@ -1,4 +1,4 @@
-function levelsGeneration(rows=1, cols=4) {
+function levelsGeneration(rows=3, cols=8) {
     var level = []
         for (let row = 0; row < rows; row++) {
             let colArr = []
@@ -61,9 +61,6 @@ class arcanoidGame {
             }
         }
 
-        this.ball.vx *= 1.1;
-        this.ball.vy *= 1.1;
-
         this.platform.x = (this.canvas.width - this.platform.width) / 2;
 
         this.ball.reset(this.platform);
@@ -96,30 +93,46 @@ class arcanoidGame {
     }
 
     update() {
+
         const result = this.ball.update(this.canvas, this.platform);
 
-        if (result === "gameover") {
-            this.gameOver();
-            location.reload();
+       if (result === "gameover") {
+            const bestScore = localStorage.getItem("bestScore") || 0;
+            if (this.score > bestScore) localStorage.setItem("bestScore", this.score);
+
+            alert(`Игра окончена! Ваш счёт: ${this.score}`);
+            setTimeout(() => location.reload(), 500);
+            return;
         }
 
-        this.platform.update(this.canvas)
+        this.platform.update(this.canvas);
 
-        if  (this.ball.y + this.ball.radius >= this.platform.y &&
+        if (
+            this.ball.y + this.ball.radius >= this.platform.y &&
             this.ball.y - this.ball.radius <= this.platform.y + this.platform.height &&
             this.ball.x >= this.platform.x &&
             this.ball.x <= this.platform.x + this.platform.width &&
-            this.ball.vy > 0)
-         {
-            this.ball.vy *= -1;
-            
-            const hitPoint = this.ball.x - (this.platform.x + this.platform.width / 2);
-            this.ball.vx = hitPoint * 0.1;
+            this.ball.vy > 0
+        ) {
+            const hitPoint =
+                (this.ball.x - (this.platform.x + this.platform.width / 2)) /
+                (this.platform.width / 2);
+
+            const angle = hitPoint * (Math.PI / 3);
+
+            const speed = Math.sqrt(
+                this.ball.vx * this.ball.vx +
+                this.ball.vy * this.ball.vy
+            );
+
+            this.ball.vx = speed * Math.sin(angle);
+            this.ball.vy = -speed * Math.cos(angle);
         }
 
         this.bricks.forEach((brick) => {
-            if (brick.destroyed) return 
-            
+
+            if (brick.destroyed) return;
+
             const ballLeft = this.ball.x - this.ball.radius;
             const ballRight = this.ball.x + this.ball.radius;
             const ballTop = this.ball.y - this.ball.radius;
@@ -130,32 +143,51 @@ class arcanoidGame {
             const brickTop = brick.y;
             const brickBottom = brick.y + brick.height;
 
-            const colission = ballLeft < brickRight &&
-            ballRight > brickLeft &&
-            ballBottom > brickTop &&
-            ballTop < brickBottom
+            const collision =
+                ballLeft < brickRight &&
+                ballRight > brickLeft &&
+                ballBottom > brickTop &&
+                ballTop < brickBottom;
 
-            if (colission) {
-                brick.hit()
+            if (collision) {
+
+                brick.hit();
+
                 if (brick.destroyed) {
-                    this.score += 100
+                    this.score += 100;
+                } else {
+                    this.score += 50;
                 }
-                else {
-                    this.score += 50
-                    this.ball.vy *= -1
+
+                const overlapX = Math.min(
+                    ballRight - brickLeft,
+                    brickRight - ballLeft
+                );
+
+                const overlapY = Math.min(
+                    ballBottom - brickTop,
+                    brickBottom - ballTop
+                );
+
+                if (overlapX < overlapY) {
+                    this.ball.vx *= -1;
+                } else {
+                    this.ball.vy *= -1;
                 }
-            }   
-        }
-    )
+
+                this.ball.x += this.ball.vx;
+                this.ball.y += this.ball.vy;
+            }
+        });
+
         const remainingBricks = this.bricks.filter(b => !b.destroyed);
 
         if (remainingBricks.length === 0) {
-            setTimeout(() => {}, 1500); 
-            alert('Вы прошли уровень!')
-            alert(`Ваше суммарное количество очков: ${this.score}`)
+            alert('Вы прошли уровень!');
+            alert(`Ваше суммарное количество очков: ${this.score}`);
             this.nextLevel();
         }
-    }
+}
 
     loop(){
         this.update()

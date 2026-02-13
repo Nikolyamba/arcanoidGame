@@ -51,7 +51,7 @@ class Ball {
             this.vy *= -1
         }
         
-        if (this.y - this.radius > canvas.height){
+        if (this.y + this.radius > canvas.height){
             return "gameover"
         }
     }
